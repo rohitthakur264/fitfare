@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  background: radial-gradient(ellipse at top, #1e1b4b 0%, #0f172a 60%);
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  color: #fff;
+  min-height: 100vh;
+}
+
+/* Glow card effect */
+.card-glow {
+  box-shadow:
+    0 0 0 1px rgba(99, 102, 241, 0.15),
+    0 0 30px rgba(99, 102, 241, 0.18),
+    0 8px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Animated LIVE pulse */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+
+.live-pulse {
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+/* Smooth chart tooltip */
+.recharts-tooltip-wrapper {
+  filter: drop-shadow(0 4px 16px rgba(0,0,0,0.5));
+}
+
+/* Scrollbar polish */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }

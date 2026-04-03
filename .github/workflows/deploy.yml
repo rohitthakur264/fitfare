@@ -1,0 +1,26 @@
+name: Deploy Lambda
+
+on:
+  push:
+    branches: [main, master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Zip Lambda
+        working-directory: ./lambda
+        run: zip -r lambda.zip .
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: Deploy
+        working-directory: ./lambda
+        run: aws lambda update-function-code --function-name event-ingestion --zip-file fileb://lambda.zip
