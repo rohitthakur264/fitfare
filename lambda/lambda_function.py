@@ -30,30 +30,13 @@ def lambda_handler(event, context):
         body    = json.loads(event['body'])
         user_id = body.get("user_id", "unknown")
 
-        # Store raw event in S3
-        s3.put_object(
-            Bucket=BUCKET_NAME,
-            Key=f"{uuid.uuid4()}.json",
-            Body=json.dumps(body)
-        )
+        kinesis = boto3.client('kinesis')
 
-        time_bucket = datetime.utcnow().strftime("%Y-%m-%d-%H:%M")
-
-        # Store total_events count + users list (list is JSON-safe, sets are not)
-        table.update_item(
-            Key={'time_bucket': time_bucket},
-            UpdateExpression="""
-                SET #u = list_append(if_not_exists(#u, :empty), :u)
-                ADD total_events :inc
-            """,
-            ExpressionAttributeNames={
-                "#u": "users"
-            },
-            ExpressionAttributeValues={
-                ':u': [user_id],
-                ':empty': [],
-                ':inc': 1
-            }
+        # Push to real-time stream instead of direct DB writing
+        kinesis.put_record(
+            StreamName='analytics-stream',
+            Data=json.dumps(body),
+            PartitionKey=user_id
         )
 
         return {
