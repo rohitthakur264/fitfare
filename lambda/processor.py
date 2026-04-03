@@ -12,12 +12,10 @@ table       = dynamodb.Table(TABLE_NAME)
 
 def lambda_handler(event, context):
     """
-    Triggered by Kinesis. Event contains a list of records.
+    Triggered by SQS. Event contains a list of records.
     """
     for record in event['Records']:
-        import base64
-        payload = base64.b64decode(record['kinesis']['data']).decode('utf-8')
-        body = json.loads(payload)
+        body = json.loads(record['body'])
         
         user_id = body.get("user_id", "unknown")
         

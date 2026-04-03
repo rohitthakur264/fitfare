@@ -30,13 +30,13 @@ def lambda_handler(event, context):
         body    = json.loads(event['body'])
         user_id = body.get("user_id", "unknown")
 
-        kinesis = boto3.client('kinesis')
+        sqs = boto3.client('sqs', region_name='ap-south-1')
+        q_url = sqs.get_queue_url(QueueName='analytics-queue')['QueueUrl']
 
-        # Push to real-time stream instead of direct DB writing
-        kinesis.put_record(
-            StreamName='analytics-stream',
-            Data=json.dumps(body),
-            PartitionKey=user_id
+        # Push to SQS Queue for asynchronous processing
+        sqs.send_message(
+            QueueUrl=q_url,
+            MessageBody=json.dumps(body)
         )
 
         return {
