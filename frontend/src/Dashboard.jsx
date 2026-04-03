@@ -77,16 +77,25 @@ export default function Dashboard() {
   const [metrics, setMetrics] = useState({ total_events: 0, active_users: 0, last_event: null, records: [] });
   const [activeTab, setActiveTab] = useState("Overview");
   
-  // Polling logic
+  // WebSocket Live Connection
   useEffect(() => {
-    const iv = setInterval(async () => {
-      sendEvent().catch(console.error);
-      try { 
-        const d = await getMetrics(); 
-        setMetrics(d); 
-      } catch (e) { console.error(e); }
-    }, 2000);
-    return () => clearInterval(iv);
+    // Note: We keep the sendEvent loop just to simulate active users for the demo
+    const iv = setInterval(() => sendEvent().catch(console.error), 2000);
+    
+    // Connect to API Gateway WebSocket
+    const socket = new WebSocket("wss://<API_ID>.execute-api.ap-south-1.amazonaws.com/prod");
+
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.type === "metrics_update") {
+        setMetrics(data.payload);
+      }
+    };
+
+    return () => {
+      clearInterval(iv);
+      socket.close();
+    };
   }, []);
 
   const navItems = ["Overview", "Live Stream", "Funnels", "Retention", "Segments"];

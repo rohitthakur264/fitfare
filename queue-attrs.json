@@ -1,0 +1,4 @@
+{
+  "ReceiveMessageWaitTimeSeconds": "20",
+  "RedrivePolicy": "{\"deadLetterTargetArn\":\"arn:aws:sqs:ap-south-1:075483721489:analytics-dlq\",\"maxReceiveCount\":\"3\"}"
+}
