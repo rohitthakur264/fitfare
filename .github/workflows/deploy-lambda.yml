@@ -7,6 +7,8 @@ on:
     paths:
       - 'lambda/**'
       - 'processor/**'
+      - '.github/workflows/deploy-lambda.yml'
+  workflow_dispatch:
 
 jobs:
   deploy:
