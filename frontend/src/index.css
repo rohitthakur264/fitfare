@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Roboto:wght@300;400;500;600;700&display=swap');
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -8,39 +8,353 @@
 
 html, body, #root {
   height: 100%;
+  width: 100%;
 }
 
 body {
-  background: radial-gradient(ellipse at top, #1e1b4b 0%, #0f172a 60%);
-  font-family: 'Inter', 'Segoe UI', sans-serif;
-  color: #fff;
+  background: #f8f9fa;
+  font-family: 'Google Sans', 'Roboto', 'Segoe UI', sans-serif;
+  color: #202124;
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Glow card effect */
-.card-glow {
-  box-shadow:
-    0 0 0 1px rgba(99, 102, 241, 0.15),
-    0 0 30px rgba(99, 102, 241, 0.18),
-    0 8px 40px rgba(0, 0, 0, 0.5);
-}
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #dadce0; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #bdc1c6; }
 
-/* Animated LIVE pulse */
+/* ── Animations ── */
 @keyframes pulse {
   0%, 100% { opacity: 1; }
-  50%       { opacity: 0.35; }
+  50% { opacity: 0.4; }
 }
 
-.live-pulse {
-  animation: pulse 1.8s ease-in-out infinite;
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* Smooth chart tooltip */
+@keyframes countUp {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes widgetEnter {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.widget-enter {
+  animation: widgetEnter 0.3s cubic-bezier(0.34, 1.2, 0.64, 1) both;
+}
+
+
+.live-dot {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.fade-in {
+  animation: fadeInUp 0.4s ease forwards;
+}
+
+.count-in {
+  animation: countUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ── Sidebar ── */
+.ga-sidebar {
+  width: 256px;
+  min-width: 256px;
+  background: #fff;
+  border-right: 1px solid #e8eaed;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+}
+
+/* ── Nav Items ── */
+.ga-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px 10px 20px;
+  border-radius: 0 24px 24px 0;
+  margin-right: 12px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #5f6368;
+  position: relative;
+}
+
+.ga-nav-item:hover {
+  background: #f1f3f4;
+  color: #1a73e8;
+}
+
+.ga-nav-item.active {
+  background: #e8f0fe;
+  color: #1a73e8;
+  font-weight: 600;
+}
+
+.ga-nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 3px;
+  background: #1a73e8;
+  border-radius: 0 2px 2px 0;
+}
+
+.ga-nav-section {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #80868b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 16px 20px 6px;
+}
+
+/* ── Stat Cards ── */
+.ga-card {
+  background: #fff;
+  border: 1px solid #e8eaed;
+  border-radius: 8px;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.ga-card:hover {
+  box-shadow: 0 1px 6px rgba(60, 64, 67, 0.12), 0 4px 16px rgba(60, 64, 67, 0.08);
+  transform: translateY(-1px);
+}
+
+.ga-stat-card {
+  background: #fff;
+  border: 1px solid #e8eaed;
+  border-radius: 8px;
+  padding: 20px 24px;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.ga-stat-card:hover {
+  box-shadow: 0 1px 6px rgba(60, 64, 67, 0.12), 0 4px 16px rgba(60, 64, 67, 0.08);
+  transform: translateY(-1px);
+}
+
+/* ── Topbar ── */
+.ga-topbar {
+  height: 64px;
+  background: #fff;
+  border-bottom: 1px solid #e8eaed;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* ── Date Range Pill ── */
+.ga-date-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f1f3f4;
+  border: 1px solid #e8eaed;
+  border-radius: 24px;
+  padding: 7px 14px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #3c4043;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.ga-date-pill:hover { background: #e8eaed; }
+
+/* ── Primary Button ── */
+.ga-btn-primary {
+  background: #1a73e8;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 18px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+  font-family: inherit;
+}
+.ga-btn-primary:hover {
+  background: #1765cc;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* ── Tab Pill ── */
+.ga-tab {
+  padding: 6px 16px;
+  border-radius: 24px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: #5f6368;
+  border: 1px solid transparent;
+  transition: all 0.15s;
+}
+.ga-tab:hover { background: #f1f3f4; }
+.ga-tab.active {
+  background: #e8f0fe;
+  color: #1a73e8;
+  border-color: #1a73e8;
+}
+
+/* ── Real-time badge ── */
+.ga-realtime-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #e6f4ea;
+  color: #137333;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+/* ── Tooltip ── */
 .recharts-tooltip-wrapper {
-  filter: drop-shadow(0 4px 16px rgba(0,0,0,0.5));
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.12));
 }
 
-/* Scrollbar polish */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+/* ── Table ── */
+.ga-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.ga-table th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #5f6368;
+  border-bottom: 1px solid #e8eaed;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.ga-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f1f3f4;
+  color: #3c4043;
+}
+.ga-table tr:last-child td { border-bottom: none; }
+.ga-table tr:hover td { background: #f8f9fa; }
+
+/* ── Heatmap cell ── */
+.retention-cell {
+  text-align: center;
+  padding: 8px 6px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  transition: transform 0.15s;
+}
+.retention-cell:hover { transform: scale(1.05); cursor: default; }
+
+/* ── Progress bar ── */
+.ga-progress-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: #e8eaed;
+  overflow: hidden;
+}
+.ga-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #1a73e8, #4285f4);
+  border-radius: 2px;
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Mobile Responsiveness ── */
+@media (max-width: 768px) {
+  #root > div {
+    flex-direction: column !important;
+    overflow-y: auto !important;
+  }
+  
+  .ga-sidebar {
+    width: 100% !important;
+    height: auto !important;
+    position: relative !important;
+    border-right: none !important;
+    border-bottom: 1px solid #e8eaed !important;
+  }
+
+  .ga-sidebar nav {
+    display: flex;
+    overflow-x: auto;
+    padding: 10px !important;
+    white-space: nowrap;
+  }
+
+  .ga-nav-section {
+    display: none;
+  }
+
+  .ga-nav-item {
+    margin: 0 4px !important;
+    border-radius: 16px !important;
+    padding: 8px 12px !important;
+  }
+
+  .ga-nav-item.active::before {
+    display: none;
+  }
+
+  /* Make grid 1 column */
+  main > div[style*="grid"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Force cards to 1 column span */
+  .ga-card, .widget-enter {
+    grid-column: span 1 !important;
+  }
+
+  /* Make topbar responsive */
+  .ga-topbar {
+    height: auto !important;
+    flex-direction: column;
+    align-items: flex-start !important;
+    padding: 16px !important;
+    gap: 12px !important;
+  }
+
+  .ga-topbar button {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .ga-topbar > div:not(:first-child) {
+    width: 100%;
+  }
+}
