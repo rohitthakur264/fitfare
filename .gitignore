@@ -4,3 +4,5 @@ dist/
 .DS_Store
 lambda.zip
 __pycache__/
+*.pem
+cloud-key.pem
