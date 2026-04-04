@@ -10,8 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Zip Lambda
         run: |
@@ -29,4 +28,5 @@ jobs:
         run: |
           aws lambda update-function-code \
             --function-name event-ingestion \
-            --zip-file fileb://lambda/lambda.zip
+            --zip-file fileb://lambda/lambda.zip \
+            --region ap-south-1
