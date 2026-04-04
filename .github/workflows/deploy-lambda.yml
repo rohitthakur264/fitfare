@@ -27,6 +27,10 @@ jobs:
 
       - name: Deploy Lambda
         run: |
+          echo "=== Verifying zip exists ==="
+          ls -la lambda/
+          echo "=== Deploying to Lambda ==="
           aws lambda update-function-code \
             --function-name event-ingestion \
-            --zip-file fileb://lambda/lambda.zip
+            --zip-file fileb://lambda/lambda.zip \
+            --region ap-south-1
