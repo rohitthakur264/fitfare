@@ -18,6 +18,7 @@ apigw = boto3.client(
 )
 
 def lambda_handler(event, context):
+    print("Event received:", event)
 
     # 🔁 Process SQS records
     for record in event['Records']:

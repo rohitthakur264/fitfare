@@ -1,7 +1,6 @@
 import json
 import boto3
 import os
-import jwt
 from decimal import Decimal
 
 # AWS setup
@@ -11,7 +10,7 @@ dynamodb = boto3.resource('dynamodb')
 BUCKET_NAME = "cloud-analytics-events-rohit123"
 TABLE_NAME = "analytics-metrics"
 table = dynamodb.Table(TABLE_NAME)
-SECRET = "mysecretkey"
+VALID_TOKEN = "mysecrettoken123"
 
 
 # ✅ FIXED CLASS (INDENTED PROPERLY)
@@ -23,6 +22,7 @@ class DecimalEncoder(json.JSONEncoder):
 
 
 def lambda_handler(event, context):
+    print("Event received:", event)
 
     method = event.get("requestContext", {}).get("http", {}).get("method")
     
@@ -42,15 +42,16 @@ def lambda_handler(event, context):
     # ==========================
     if method == "POST":
         try:
-            # 1. JWT Verification
+            # 1. Token Verification
             headers = event.get("headers", {})
-            auth_header = headers.get("authorization", "") or headers.get("Authorization", "")
+            token = headers.get("authorization", "") or headers.get("Authorization", "")
             
-            if not auth_header.startswith("Bearer "):
-                return {"statusCode": 401, "body": json.dumps({"message": "Unauthorized"})}
-                
-            token = auth_header.split(" ")[1]
-            jwt.decode(token, SECRET, algorithms=["HS256"])
+            if token != VALID_TOKEN:
+                return {
+                    "statusCode": 401,
+                    "headers": {"Access-Control-Allow-Origin": "*"},
+                    "body": json.dumps({"error": "Unauthorized"})
+                }
             
             # Safe parsing
             if isinstance(event.get('body'), str):

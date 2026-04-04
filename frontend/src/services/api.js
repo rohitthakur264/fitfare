@@ -1,5 +1,5 @@
 const API_BASE = "https://z2b1uh7ffb.execute-api.ap-south-1.amazonaws.com/prod";
-const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicm9oaXQifQ.q4j45ydjL4SYzPTCJ5jB8kgWAK6gknk9YqpyWMg9cfw";
+const TOKEN = "mysecrettoken123";
 
 export const sendEvent = async (userId, eventName = "page_view") => {
   try {
@@ -7,7 +7,7 @@ export const sendEvent = async (userId, eventName = "page_view") => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${TOKEN}`
+        "Authorization": TOKEN
       },
       body: JSON.stringify({
         user_id: userId,
