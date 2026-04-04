@@ -4,25 +4,39 @@ on:
   push:
     paths:
       - 'lambda/**'
+      - 'processor/**'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Zip Lambda
+      - name: Zip event-ingestion
         run: |
           cd lambda
           zip -r lambda.zip .
 
-      - name: Deploy to AWS Lambda
+      - name: Deploy event-ingestion
         uses: appleboy/aws-lambda-deploy@v1.0.0
         with:
           function_name: event-ingestion
           zip_file: lambda/lambda.zip
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          region: ${{ secrets.AWS_REGION }}
+
+      - name: Zip processor
+        run: |
+          cd processor
+          zip -r processor.zip .
+
+      - name: Deploy processor
+        uses: appleboy/aws-lambda-deploy@v1.0.0
+        with:
+          function_name: processor
+          zip_file: processor/processor.zip
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           region: ${{ secrets.AWS_REGION }}
