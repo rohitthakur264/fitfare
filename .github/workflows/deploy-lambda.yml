@@ -4,19 +4,13 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'lambda/**'
-      - 'processor/**'
-      - '.github/workflows/deploy-lambda.yml'
-  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Zip Lambda
         run: |
@@ -32,10 +26,6 @@ jobs:
 
       - name: Deploy Lambda
         run: |
-          echo "=== Verifying zip exists ==="
-          ls -la lambda/
-          echo "=== Deploying to Lambda ==="
           aws lambda update-function-code \
             --function-name event-ingestion \
-            --zip-file fileb://lambda/lambda.zip \
-            --region ap-south-1
+            --zip-file fileb://lambda/lambda.zip
