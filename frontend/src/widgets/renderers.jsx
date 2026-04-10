@@ -75,15 +75,17 @@ export function WConcurrentUsers({ metrics, height = 220 }) {
           Live API Data Empty - Showing Test Data (check browser network tab)
         </div>
       )}
-      <LineChart width={800} height={height} data={records} margin={{ top:5, right:10, left:-20, bottom:0 }}>
-        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f3f4" />
-        <XAxis dataKey="time" tick={{ fill:"#80868b", fontSize:11 }} tickLine={false} axisLine={false} minTickGap={30} />
-        <YAxis tick={{ fill:"#80868b", fontSize:11 }} tickLine={false} axisLine={false} />
-        <Tooltip content={<GaTooltip />} />
-        <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize:"0.78rem", paddingTop: 8 }} />
-        <Line type="monotone" dataKey="events" name="Events" stroke={C.blue} strokeWidth={2.5} isAnimationActive={false} dot={false} />
-        <Line type="monotone" dataKey="users" name="Active Users" stroke={C.green} strokeWidth={2.5} isAnimationActive={false} dot={false} />
-      </LineChart>
+      <ResponsiveContainer width="100%" height={height}>
+        <LineChart data={records} margin={{ top:5, right:10, left:-20, bottom:0 }}>
+          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f3f4" />
+          <XAxis dataKey="time" tick={{ fill:"#80868b", fontSize:11 }} tickLine={false} axisLine={false} minTickGap={30} />
+          <YAxis tick={{ fill:"#80868b", fontSize:11 }} tickLine={false} axisLine={false} />
+          <Tooltip content={<GaTooltip />} />
+          <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize:"0.78rem", paddingTop: 8 }} />
+          <Line type="monotone" dataKey="events" name="Events" stroke={C.blue} strokeWidth={3} isAnimationActive={true} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
+          <Line type="monotone" dataKey="users" name="Active Users" stroke={C.green} strokeWidth={3} isAnimationActive={true} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
+        </LineChart>
+      </ResponsiveContainer>
     </div>
   );
 }
