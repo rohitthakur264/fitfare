@@ -54,23 +54,18 @@ const ProgressBar = ({ value, max = 100, color = C.blue }) => (
    metrics = { total_events, active_users, records:[] }
    ══════════════════════════════════════════════════════════ */
 
-/* 1. Concurrent Users — live area chart */
 export function WConcurrentUsers({ metrics, height = 220 }) {
   return (
     <ResponsiveContainer width="100%" height={height}>
-      <AreaChart data={metrics.records} margin={{ top:5, right:10, left:-20, bottom:0 }}>
-        <defs>
-          <linearGradient id="grad_users" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"   stopColor={C.blue} stopOpacity={0.2} />
-            <stop offset="100%" stopColor={C.blue} stopOpacity={0} />
-          </linearGradient>
-        </defs>
+      <LineChart data={metrics.records || []} margin={{ top:5, right:10, left:-20, bottom:0 }}>
         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f3f4" />
         <XAxis dataKey="time" tick={{ fill:"#80868b", fontSize:11 }} tickLine={false} axisLine={false} minTickGap={30} />
         <YAxis tick={{ fill:"#80868b", fontSize:11 }} tickLine={false} axisLine={false} />
         <Tooltip content={<GaTooltip />} />
-        <Area type="monotone" dataKey="users" name="Active Users" stroke={C.blue} strokeWidth={2.5} fill="url(#grad_users)" isAnimationActive={false} dot={false} />
-      </AreaChart>
+        <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize:"0.78rem" }} />
+        <Line type="monotone" dataKey="events" name="Events" stroke={C.blue} strokeWidth={2.5} isAnimationActive={false} dot={false} />
+        <Line type="monotone" dataKey="users" name="Active Users" stroke={C.green} strokeWidth={2.5} isAnimationActive={false} dot={false} />
+      </LineChart>
     </ResponsiveContainer>
   );
 }
