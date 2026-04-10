@@ -59,15 +59,15 @@ export function WConcurrentUsers({ metrics, height = 220 }) {
   
   if (records.length === 0) {
     return (
-      <div style={{ height, display: "flex", alignItems: "center", justifyContent: "center", color: "#80868b" }}>
-        No data yet... (Events: {metrics?.total_events}, Users: {metrics?.active_users})
+      <div style={{ height, display: "flex", alignItems: "center", justifyContent: "center", color: "#80868b", background: "#fafafa", borderRadius: "10px" }}>
+        Attempting to fetch data (Events: {metrics?.total_events}, Users: {metrics?.active_users})
       </div>
     );
   }
 
   return (
-    <ResponsiveContainer width="100%" height={height}>
-      <LineChart data={records} margin={{ top:5, right:10, left:-20, bottom:0 }}>
+    <div style={{ width: '100%', height }}>
+      <LineChart width={800} height={height} data={records} margin={{ top:5, right:10, left:-20, bottom:0 }}>
         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f3f4" />
         <XAxis dataKey="time" tick={{ fill:"#80868b", fontSize:11 }} tickLine={false} axisLine={false} minTickGap={30} />
         <YAxis tick={{ fill:"#80868b", fontSize:11 }} tickLine={false} axisLine={false} />
@@ -76,7 +76,7 @@ export function WConcurrentUsers({ metrics, height = 220 }) {
         <Line type="monotone" dataKey="events" name="Events" stroke={C.blue} strokeWidth={2.5} isAnimationActive={false} dot={false} />
         <Line type="monotone" dataKey="users" name="Active Users" stroke={C.green} strokeWidth={2.5} isAnimationActive={false} dot={false} />
       </LineChart>
-    </ResponsiveContainer>
+    </div>
   );
 }
 
