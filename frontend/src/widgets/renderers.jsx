@@ -55,18 +55,26 @@ const ProgressBar = ({ value, max = 100, color = C.blue }) => (
    ══════════════════════════════════════════════════════════ */
 
 export function WConcurrentUsers({ metrics, height = 220 }) {
-  const records = metrics?.records || [];
+  let records = metrics?.records || [];
+  let isDummy = false;
   
   if (records.length === 0) {
-    return (
-      <div style={{ height, display: "flex", alignItems: "center", justifyContent: "center", color: "#80868b", background: "#fafafa", borderRadius: "10px" }}>
-        Attempting to fetch data (Events: {metrics?.total_events}, Users: {metrics?.active_users})
-      </div>
-    );
+    isDummy = true;
+    records = [
+      { time: "10:00", events: 5, users: 2 },
+      { time: "10:01", events: 15, users: 8 },
+      { time: "10:02", events: 8, users: 4 },
+      { time: "10:03", events: 20, users: 12 },
+    ];
   }
 
   return (
-    <div style={{ width: '100%', height }}>
+    <div style={{ width: '100%', height, position: 'relative' }}>
+      {isDummy && (
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, textAlign: 'center', color: '#ea4335', fontSize: '0.75rem', fontWeight: 600, zIndex: 10 }}>
+          Live API Data Empty - Showing Test Data (check browser network tab)
+        </div>
+      )}
       <LineChart width={800} height={height} data={records} margin={{ top:5, right:10, left:-20, bottom:0 }}>
         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f3f4" />
         <XAxis dataKey="time" tick={{ fill:"#80868b", fontSize:11 }} tickLine={false} axisLine={false} minTickGap={30} />
