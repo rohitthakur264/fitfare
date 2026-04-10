@@ -303,9 +303,9 @@ export default function Dashboard() {
         }));
         
         setChartData(formattedRecords);
-        setMetrics({ ...data.payload, records: formattedRecords }); // 🔥 update UI
+        setMetrics(prev => ({ ...prev, ...data.payload, records: formattedRecords })); // 🔥 update UI
       } else if (data.payload) {
-        setMetrics(data.payload);
+        setMetrics(prev => ({ ...prev, ...data.payload }));
       }
     };
 
