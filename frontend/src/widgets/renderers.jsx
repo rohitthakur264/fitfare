@@ -66,10 +66,10 @@ export function WConcurrentUsers({ metrics, height = 220 }) {
           </linearGradient>
         </defs>
         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f3f4" />
-        <XAxis dataKey="time_bucket" tick={{ fill:"#80868b", fontSize:11 }} tickLine={false} axisLine={false} minTickGap={30} />
+        <XAxis dataKey="time" tick={{ fill:"#80868b", fontSize:11 }} tickLine={false} axisLine={false} minTickGap={30} />
         <YAxis tick={{ fill:"#80868b", fontSize:11 }} tickLine={false} axisLine={false} />
         <Tooltip content={<GaTooltip />} />
-        <Area type="monotone" dataKey="active_users" name="Active Users" stroke={C.blue} strokeWidth={2.5} fill="url(#grad_users)" isAnimationActive={false} dot={false} />
+        <Area type="monotone" dataKey="users" name="Active Users" stroke={C.blue} strokeWidth={2.5} fill="url(#grad_users)" isAnimationActive={false} dot={false} />
       </AreaChart>
     </ResponsiveContainer>
   );
@@ -81,10 +81,10 @@ export function WEventVolumeBar({ metrics, height = 220 }) {
     <ResponsiveContainer width="100%" height={height}>
       <BarChart data={metrics.records} margin={{ top:5, right:10, left:-20, bottom:0 }}>
         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f3f4" />
-        <XAxis dataKey="time_bucket" tick={{ fill:"#80868b", fontSize:11 }} tickLine={false} axisLine={false} minTickGap={30} />
+        <XAxis dataKey="time" tick={{ fill:"#80868b", fontSize:11 }} tickLine={false} axisLine={false} minTickGap={30} />
         <YAxis tick={{ fill:"#80868b", fontSize:11 }} tickLine={false} axisLine={false} />
         <Tooltip content={<GaTooltip />} />
-        <Bar dataKey="total_events" name="Events" fill={C.blue} radius={[4,4,0,0]} />
+        <Bar dataKey="events" name="Events" fill={C.blue} radius={[4,4,0,0]} />
       </BarChart>
     </ResponsiveContainer>
   );
@@ -304,13 +304,13 @@ export function WComposedOverview({ metrics, height = 220 }) {
     <ResponsiveContainer width="100%" height={height}>
       <ComposedChart data={metrics.records} margin={{ top:5, right:10, left:-20, bottom:0 }}>
         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f3f4" />
-        <XAxis dataKey="time_bucket" tick={{ fill:"#80868b", fontSize:11 }} tickLine={false} axisLine={false} minTickGap={30} />
+        <XAxis dataKey="time" tick={{ fill:"#80868b", fontSize:11 }} tickLine={false} axisLine={false} minTickGap={30} />
         <YAxis yAxisId="left"  tick={{ fill:"#80868b", fontSize:11 }} tickLine={false} axisLine={false} />
         <YAxis yAxisId="right" orientation="right" tick={{ fill:"#80868b", fontSize:11 }} tickLine={false} axisLine={false} />
         <Tooltip content={<GaTooltip />} />
         <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize:"0.78rem" }} />
-        <Bar     yAxisId="left"  dataKey="total_events"  name="Events"  fill={C.blue}  radius={[4,4,0,0]} />
-        <Line    yAxisId="right" dataKey="active_users"  name="Users"   stroke={C.green} strokeWidth={2.5} dot={false} />
+        <Bar     yAxisId="left"  dataKey="events"  name="Events"  fill={C.blue}  radius={[4,4,0,0]} />
+        <Line    yAxisId="right" dataKey="users"  name="Users"   stroke={C.green} strokeWidth={2.5} dot={false} />
       </ComposedChart>
     </ResponsiveContainer>
   );
@@ -350,7 +350,7 @@ export function WRadialGoals({ height = 220 }) {
 /* 12. Error Rate — live line, red */
 export function WErrorRate({ metrics, height = 220 }) {
   const data = (metrics.records || []).map(r => ({
-    time_bucket: r.time_bucket,
+    time: r.time || r.time_bucket,
     error_rate: parseFloat((0.5 + Math.random() * 2.5).toFixed(2)),
     threshold: 2,
   }));
@@ -358,7 +358,7 @@ export function WErrorRate({ metrics, height = 220 }) {
     <ResponsiveContainer width="100%" height={height}>
       <LineChart data={data} margin={{ top:5, right:10, left:-20, bottom:0 }}>
         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f3f4" />
-        <XAxis dataKey="time_bucket" tick={{ fill:"#80868b", fontSize:11 }} tickLine={false} axisLine={false} minTickGap={30} />
+        <XAxis dataKey="time" tick={{ fill:"#80868b", fontSize:11 }} tickLine={false} axisLine={false} minTickGap={30} />
         <YAxis tick={{ fill:"#80868b", fontSize:11 }} tickLine={false} axisLine={false} unit="%" />
         <Tooltip content={<GaTooltip />} />
         <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize:"0.78rem" }} />

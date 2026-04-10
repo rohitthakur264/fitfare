@@ -265,6 +265,7 @@ export default function Dashboard() {
   const [dateRange,  setDateRange]  = useState("Last 7 Days");
   const [selectedProp, setSelectedProp] = useState("My Analytics App");
   const [metrics,    setMetrics]    = useState({ total_events: 0, active_users: 0, records: [] });
+  const [chartData,  setChartData]  = useState([]);
 
   /* Generate a persistent anonymous device ID for real user tracking */
   const [deviceId] = useState(() => {
@@ -294,8 +295,17 @@ export default function Dashboard() {
       const data = JSON.parse(event.data);
       console.log("LIVE DATA:", data);
 
-      if (data.payload) {
-        setMetrics(data.payload); // 🔥 update UI
+      if (data.payload && data.payload.records) {
+        const formattedRecords = data.payload.records.map(item => ({
+          time: item.time_bucket,
+          events: item.total_events,
+          users: item.active_users
+        }));
+        
+        setChartData(formattedRecords);
+        setMetrics({ ...data.payload, records: formattedRecords }); // 🔥 update UI
+      } else if (data.payload) {
+        setMetrics(data.payload);
       }
     };
 
@@ -308,6 +318,34 @@ export default function Dashboard() {
     };
 
     return () => socket.close(); // 🔥 cleanup
+  }, []);
+
+  /* 🔥 POLLING FOR LIVE DATA (Fallback / Alternative to WS) */
+  const fetchData = async () => {
+    try {
+      const res = await fetch("https://z2b1uh7ffb.execute-api.ap-south-1.amazonaws.com/prod/metrics");
+      const data = await res.json();
+      console.log(data.records);
+
+      if (data && data.records) {
+        const formattedData = data.records.map(item => ({
+          time: item.time_bucket,
+          events: item.total_events,
+          users: item.active_users
+        }));
+        
+        setChartData(formattedData);
+        setMetrics(prev => ({ ...prev, ...data, records: formattedData }));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+    const interval = setInterval(fetchData, 2000);
+    return () => clearInterval(interval);
   }, []);
 
   /* 🔥 AUTO EVENT GENERATOR */
