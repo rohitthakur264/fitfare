@@ -55,14 +55,24 @@ const ProgressBar = ({ value, max = 100, color = C.blue }) => (
    ══════════════════════════════════════════════════════════ */
 
 export function WConcurrentUsers({ metrics, height = 220 }) {
+  const records = metrics?.records || [];
+  
+  if (records.length === 0) {
+    return (
+      <div style={{ height, display: "flex", alignItems: "center", justifyContent: "center", color: "#80868b" }}>
+        No data yet... (Events: {metrics?.total_events}, Users: {metrics?.active_users})
+      </div>
+    );
+  }
+
   return (
     <ResponsiveContainer width="100%" height={height}>
-      <LineChart data={metrics.records || []} margin={{ top:5, right:10, left:-20, bottom:0 }}>
+      <LineChart data={records} margin={{ top:5, right:10, left:-20, bottom:0 }}>
         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f3f4" />
         <XAxis dataKey="time" tick={{ fill:"#80868b", fontSize:11 }} tickLine={false} axisLine={false} minTickGap={30} />
         <YAxis tick={{ fill:"#80868b", fontSize:11 }} tickLine={false} axisLine={false} />
         <Tooltip content={<GaTooltip />} />
-        <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize:"0.78rem" }} />
+        <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize:"0.78rem", paddingTop: 8 }} />
         <Line type="monotone" dataKey="events" name="Events" stroke={C.blue} strokeWidth={2.5} isAnimationActive={false} dot={false} />
         <Line type="monotone" dataKey="users" name="Active Users" stroke={C.green} strokeWidth={2.5} isAnimationActive={false} dot={false} />
       </LineChart>
