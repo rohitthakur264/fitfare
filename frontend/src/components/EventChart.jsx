@@ -31,6 +31,12 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 export default function EventChart({ data }) {
+  // Map API response to properties the chart expects
+  const chartData = data?.map ? data.map(item => ({
+    time: item.time_bucket || item.time,
+    events: item.total_events !== undefined ? item.total_events : item.events
+  })) : [];
+
   return (
     <div className="card-glow" style={{
       background: "linear-gradient(135deg, rgba(79,70,229,0.15) 0%, rgba(30,41,59,0.6) 100%)",
@@ -48,7 +54,7 @@ export default function EventChart({ data }) {
           letterSpacing: "2px",
           fontWeight: 700,
         }}>Events Trend</h2>
-        {data.length === 0 && (
+        {chartData.length === 0 && (
           <span style={{
             marginLeft: "auto",
             fontSize: "0.72rem",
@@ -59,7 +65,7 @@ export default function EventChart({ data }) {
       </div>
 
       <ResponsiveContainer width="100%" height={300}>
-        <AreaChart data={data} margin={{ top: 8, right: 16, left: 0, bottom: 8 }}>
+        <AreaChart data={chartData} margin={{ top: 8, right: 16, left: 0, bottom: 8 }}>
           <defs>
             <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%"  stopColor="#6366f1" stopOpacity={0.35} />
@@ -72,7 +78,7 @@ export default function EventChart({ data }) {
           </defs>
           <CartesianGrid strokeDasharray="3 5" stroke="rgba(51,65,85,0.6)" vertical={false} />
           <XAxis
-            dataKey="time_bucket"
+            dataKey="time"
             stroke="transparent"
             tick={{ fill: "#64748b", fontSize: 11, fontFamily: "Inter" }}
             tickLine={false}
@@ -86,7 +92,7 @@ export default function EventChart({ data }) {
           <Tooltip content={<CustomTooltip />} />
           <Area
             type="monotone"
-            dataKey="total_events"
+            dataKey="events"
             stroke="url(#strokeGrad)"
             strokeWidth={3}
             fill="url(#areaGrad)"

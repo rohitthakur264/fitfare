@@ -26,6 +26,12 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 export default function UserChart({ data }) {
+  // Format data inline or expect formatted data
+  const chartData = data?.map ? data.map(item => ({
+    time: item.time_bucket || item.time,
+    users: item.active_users !== undefined ? item.active_users : item.users
+  })) : [];
+
   return (
     <div className="card-glow" style={{
       background: "linear-gradient(135deg, rgba(34,197,94,0.12) 0%, rgba(30,41,59,0.6) 100%)",
@@ -40,7 +46,7 @@ export default function UserChart({ data }) {
           color: "#e2e8f0", fontSize: "0.78rem",
           textTransform: "uppercase", letterSpacing: "2px", fontWeight: 700,
         }}>Active Users</h2>
-        {data.length === 0 && (
+        {chartData.length === 0 && (
           <span style={{ marginLeft: "auto", fontSize: "0.7rem", color: "#64748b", fontStyle: "italic" }}>
             Waiting for data…
           </span>
@@ -48,7 +54,7 @@ export default function UserChart({ data }) {
       </div>
 
       <ResponsiveContainer width="100%" height={220}>
-        <LineChart data={data} margin={{ top: 6, right: 12, left: -28, bottom: 0 }}>
+        <LineChart data={chartData} margin={{ top: 6, right: 12, left: -28, bottom: 0 }}>
           <defs>
             <linearGradient id="userStroke" x1="0" y1="0" x2="1" y2="0">
               <stop offset="0%"   stopColor="#4ade80" />
@@ -56,12 +62,12 @@ export default function UserChart({ data }) {
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="2 5" stroke="rgba(51,65,85,0.5)" vertical={false} />
-          <XAxis dataKey="time_bucket" hide />
+          <XAxis dataKey="time" hide />
           <YAxis tick={{ fill: "#475569", fontSize: 10 }} tickLine={false} axisLine={false} />
           <Tooltip content={<CustomTooltip />} />
           <Line
             type="monotone"
-            dataKey="active_users"
+            dataKey="users"
             stroke="url(#userStroke)"
             strokeWidth={2.5}
             dot={{ r: 5, fill: "#22c55e", strokeWidth: 2, stroke: "#0f172a" }}
